@@ -1,5 +1,6 @@
 package com.example.seriesorganizer.activities
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,10 +18,41 @@ class CActivityLogin : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.btLogin.setOnClickListener{
+        // Проверяем, есть ли запись о пользователе. Если есть - переходим на другую форму.
+        val readSharedPref = applicationContext.getSharedPreferences(getString(R.string.FILE_NAME_PREFERENCES), Context.MODE_PRIVATE)
+        val sharedLogin = readSharedPref.getString(getString(R.string.PARAM_LOGIN), "")
+        //TODO Надо как-то шифровать пасс, илии не тут хранить
+        val sharedPassword = readSharedPref.getString(getString(R.string.PARAM_PASSWORD), "")
+        if (accessCheck(sharedLogin, sharedPassword)) {
+            val intent1 = Intent(this, CActivityMainList::class.java)
+            startActivity(intent1)
+            return
+        }
+
+
+        binding.btLogin.setOnClickListener {
+            val login = binding.etLogin.text.toString()
+            val password = binding.etPassword.text.toString()
+            if (!accessCheck(login, password)) {
+                return@setOnClickListener
+            }
+
+            // устанавливаем логин/пасс в файл настроек
+            val sharedPref = applicationContext.getSharedPreferences(getString(R.string.FILE_NAME_PREFERENCES), Context.MODE_PRIVATE)
+            with (sharedPref.edit()) {
+                putString(getString(R.string.PARAM_LOGIN), login)
+                putString(getString(R.string.PARAM_PASSWORD), password)
+                apply()
+            }
+
             val intent = Intent(this, CActivityMainList::class.java)
-            intent.putExtra("LOGIN", binding.etLogin.text.toString())
             startActivity(intent)
         }
+    }
+
+    /** Функция проверки логина/пароля */
+    private fun accessCheck(login: String?, password: String?): Boolean {
+        //TODO сюда добавить запрос, пускает ли по этому лгину/пассу
+        return !login.isNullOrEmpty() && !password.isNullOrEmpty()
     }
 }
