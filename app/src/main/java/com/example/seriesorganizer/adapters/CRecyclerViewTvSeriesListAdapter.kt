@@ -37,7 +37,7 @@ class CRecyclerViewTvSeriesListAdapter  (
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.binding.tvSeriesName.text = tvSeriesList[position].name
-        viewHolder.binding.tvSeriesInfo.text = tvSeriesList[position].info
+        viewHolder.binding.tvSeriesInfo.text = tvSeriesList[position].description
 
         viewHolder.tvSeries = tvSeriesList[position]
         viewHolder.index = position
