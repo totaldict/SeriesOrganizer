@@ -19,8 +19,8 @@ interface IServerAPITemplate {
 //    Серии сериала:
 //    https://kinopoiskapiunofficial.tech/api/v2.2/films/464963/seasons
 
-    @Headers("x-api-key: 74b74cc5-bec7-4dbc-b2a4-2f4e5889a0ba")
+    @Headers("x-api-key: 74b74cc5-bec7-4dbc-b2a4-2f4e5889a0ba", "Content-Type: application/json")
     @GET("/v2.1/films/search-by-keyword")
-    suspend fun getSearchByKeyword( @Query(value="keyword") keyword: String, @Query(value="page") page: Int): String
+    suspend fun getSearchByKeyword( @Query(value="keyword") keyword: String, @Query(value="page") page: Int): CApiResponseSearch
 
 }

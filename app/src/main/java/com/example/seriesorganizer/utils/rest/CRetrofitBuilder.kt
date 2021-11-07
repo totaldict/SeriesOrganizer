@@ -1,5 +1,7 @@
 package com.example.seriesorganizer.utils.rest
 
+import android.graphics.Movie
+import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -23,6 +25,8 @@ class CRetrofitBuilder {
                 val moshi = Moshi.Builder()
 //                    .add(CConverterLocalDateTime())
 //                    .add(CConverterUUID())
+//                    .add(KotlinJsonAdapterFactory())
+//                    .add(CApiResponseSearchJsonAdapter())
                     .build()
 
                 val instance = Retrofit
