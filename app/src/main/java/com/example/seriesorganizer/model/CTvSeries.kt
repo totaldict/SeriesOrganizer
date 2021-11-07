@@ -14,5 +14,6 @@ class CTvSeries (
     @ColumnInfo(name = "description")
     var description: String,
     /** Даты выхода сериала */
-    var episodes: Array<LocalDate>,
+    @ColumnInfo(name = "episodes")
+    var episodes: ArrayList<LocalDate>,
 )

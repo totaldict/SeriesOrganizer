@@ -3,10 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Programming/Kotlin/Seriesorganizer/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.28229166666666666" />
+        <entry key="..\:/Programming/Kotlin/Seriesorganizer/app/src/main/res/drawable/ic_launcher_background.xml" value="0.28229166666666666" />
+        <entry key="..\:/Programming/Kotlin/Seriesorganizer/app/src/main/res/layout/activity_add.xml" value="0.26614583333333336" />
         <entry key="..\:/Programming/Kotlin/Seriesorganizer/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Programming/Kotlin/Seriesorganizer/app/src/main/res/layout/activity_main_list.xml" value="0.20520833333333333" />
         <entry key="..\:/Programming/Kotlin/Seriesorganizer/app/src/main/res/layout/activity_tv_series.xml" value="0.23125" />
         <entry key="..\:/Programming/Kotlin/Seriesorganizer/app/src/main/res/layout/tvseries_list_item.xml" value="0.31354166666666666" />
+        <entry key="..\:/Programming/Kotlin/Seriesorganizer/app/src/main/res/menu/activity_main_list_bottom_menu.xml" value="0.26614583333333336" />
       </map>
     </option>
   </component>
@@ -15,5 +19,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.23125" />
+      </ProjectState>
+    </option>
   </component>
 </project>

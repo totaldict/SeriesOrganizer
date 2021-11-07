@@ -4,9 +4,10 @@ import com.squareup.moshi.Moshi
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
+
 class CRetrofitBuilder {
     companion object {
-        const val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.1/films/" // сюда отправляются запросы.
+        const val BASE_URL = "https://kinopoiskapiunofficial.tech/api/" // сюда отправляются запросы.
 
         @Volatile
         private var INSTANCE: Retrofit? = null
@@ -24,11 +25,10 @@ class CRetrofitBuilder {
 //                    .add(CConverterUUID())
                     .build()
 
-
                 val instance = Retrofit
                     .Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(MoshiConverterFactory.create(moshi))
+                    .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
                     .build()
 
                 CRetrofitBuilder.INSTANCE = instance

@@ -7,10 +7,18 @@ import com.example.seriesorganizer.databinding.TvseriesListItemBinding
 import com.example.seriesorganizer.model.CTvSeries
 
 class CRecyclerViewTvSeriesListAdapter  (
-    private val tvSeriesList: ArrayList<CTvSeries>,
+    private var tvSeriesList: List<CTvSeries>,
     private val listener: IClickListener?
 ) :
     RecyclerView.Adapter<CRecyclerViewTvSeriesListAdapter.ViewHolder>() {
+
+    fun updateData(tvSeriesList : List<CTvSeries>)
+    {
+        // тут лучше проверку, отличается или нет. Если нет - то не делаем.
+        this.tvSeriesList = tvSeriesList
+        // уведомляем форму что данные изменились и надо их обновить на форме
+        notifyDataSetChanged()
+    }
 
     /**
      * Provide a reference to the type of views that you are using
@@ -38,13 +46,18 @@ class CRecyclerViewTvSeriesListAdapter  (
         // contents of the view with that element
         viewHolder.binding.tvSeriesName.text = tvSeriesList[position].name
         viewHolder.binding.tvSeriesInfo.text = tvSeriesList[position].description
-
         viewHolder.tvSeries = tvSeriesList[position]
         viewHolder.index = position
+
+        viewHolder.binding.llLesson.setOnClickListener {
+            viewHolder.tvSeries?.let {
+                listener?.onItemClick(it, tvSeriesList.indexOf(it))
+            }
+        }
     }
 
     fun interface IClickListener {
-        fun onItemClick(lesson : CTvSeries, index: Int)
+        fun onItemClick(tvSeries : CTvSeries, index: Int)
     }
 
     // Return the size of your dataset (invoked by the layout manager)

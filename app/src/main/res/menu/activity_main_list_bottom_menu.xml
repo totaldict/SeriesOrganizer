@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/miCalendar"
+        android:title="Календарь"
+        android:icon="@drawable/ic_baseline_calendar_today_24"
+        />
+    <item
+        android:id="@+id/miAddTvSeries"
+        android:title="Добавить сериал"
+        android:icon="@drawable/ic_baseline_add_24"
+        />
+</menu>

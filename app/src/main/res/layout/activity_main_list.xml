@@ -12,4 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_lesson_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/rvTvSeriesList"
+        app:menu="@menu/activity_main_list_bottom_menu"
+        android:background="@color/purple_200"
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/white"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
