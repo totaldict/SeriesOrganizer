@@ -54,10 +54,16 @@ class CRecyclerViewTvSeriesListAdapter  (
                 listener?.onItemClick(it, tvSeriesList.indexOf(it))
             }
         }
+        viewHolder.binding.buttonDeleteTvSeries.setOnClickListener {
+            viewHolder.tvSeries?.let {
+                listener?.onItemDeleteClick(it, tvSeriesList.indexOf(it))
+            }
+        }
     }
 
-    fun interface IClickListener {
+    interface IClickListener {
         fun onItemClick(tvSeries : CTvSeries, index: Int)
+        fun onItemDeleteClick(lesson : CTvSeries, index: Int)
     }
 
     // Return the size of your dataset (invoked by the layout manager)

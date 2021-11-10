@@ -56,7 +56,10 @@ dependencies {
     //for REST JSON
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-//    kapt 'com.squareup.moshi: moshi-kotlin-codegen: version'
+    implementation("com.squareup.moshi:moshi-kotlin-codegen:1.12.0")
+    implementation("com.google.code.gson:gson:2.8.9")
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.2")
     // TODO Разобраться, почему не подключается material-calendarview
 //    def version = "2.0.0"
 //    implementation("com.github.prolificinteractive:material-calendarview:${version}")

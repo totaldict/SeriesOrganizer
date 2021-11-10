@@ -64,6 +64,11 @@ class CActivityMainList : AppCompatActivity() {
                 intent.putExtra(getString(R.string.PARAM_SERIES_ID), tvSeries.id)
                 resultLauncher.launch(intent)
             }
+            override fun onItemDeleteClick(tvSeries : CTvSeries, index: Int) {
+                lifecycleScope.launch {
+                    daoTvSeries.delete(tvSeries)
+                }
+            }
         }
 
         val adapter = CRecyclerViewTvSeriesListAdapter(tvSeriesList, listener)

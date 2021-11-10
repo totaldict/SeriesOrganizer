@@ -1,9 +1,6 @@
 package com.example.seriesorganizer.utils.rest
 
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.Query
+import retrofit2.http.*
 import java.util.*
 
 interface IServerAPITemplate {
@@ -19,8 +16,10 @@ interface IServerAPITemplate {
 //    Серии сериала:
 //    https://kinopoiskapiunofficial.tech/api/v2.2/films/464963/seasons
 
-    @Headers("x-api-key: 74b74cc5-bec7-4dbc-b2a4-2f4e5889a0ba", "Content-Type: application/json")
-    @GET("/v2.1/films/search-by-keyword")
-    suspend fun getSearchByKeyword( @Query(value="keyword") keyword: String, @Query(value="page") page: Int): CApiResponseSearch
+    @GET("/api/v2.1/films/search-by-keyword")
+    suspend fun getSearchByKeyword(@Query(value="keyword") keyword: String, @Query(value="page") page: Int): CApiResponseSearch
+
+    @GET("/api/v2.2/films/{id}/seasons")
+    suspend fun getSeasons(@Path("id") id: Int): CApiResponseEpisodes
 
 }
