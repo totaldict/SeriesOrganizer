@@ -14,13 +14,15 @@ import android.widget.ArrayAdapter
 import com.example.seriesorganizer.model.EFilmType
 import android.view.ViewGroup
 
-import android.R
 import android.util.Log
 import android.view.View
 import com.example.seriesorganizer.dao.IDAOTvSeries
 import com.example.seriesorganizer.model.CTvSeries
 import com.example.seriesorganizer.utils.CDatabase
 import com.example.seriesorganizer.utils.rest.CApiResponseEpisodes
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import java.time.LocalDate
 
 
@@ -33,6 +35,7 @@ class CActivityAdd : AppCompatActivity() {
     private var selectedId = 0
     private lateinit var daoTvSeries: IDAOTvSeries
     private lateinit var newTvSeries: CTvSeries
+    private lateinit var service: IServerAPITemplate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +44,7 @@ class CActivityAdd : AppCompatActivity() {
         setContentView(view)
 
         val retrofit = CRetrofitBuilder.getRetrofit()
-        val service = retrofit.create(IServerAPITemplate::class.java)
+        service = retrofit.create(IServerAPITemplate::class.java)
         newTvSeries = CTvSeries(0, "", "", ArrayList())
         val db = CDatabase.getDatabase(this)
         daoTvSeries = db.daoTvSeries()
@@ -68,8 +71,6 @@ class CActivityAdd : AppCompatActivity() {
                     val resultStr = "$name $type $year $rating"
                     foundSerials.add(resultStr)
                 }
-                // выводим список
-//                listView.adapter = ArrayAdapter(this@CActivityAdd, android.R.layout.simple_list_item_1, foundSerials)
 
                 listView.setAdapter(object : ArrayAdapter<Any?>(this@CActivityAdd, android.R.layout.simple_list_item_1,
                     foundSerials as List<Any?>
@@ -106,39 +107,49 @@ class CActivityAdd : AppCompatActivity() {
                     Toast.makeText(this@CActivityAdd, "Ничего не выбрано.", Toast.LENGTH_LONG).show()
                     return@setOnClickListener
                 }
-                // 1. запрашиваем инфо по сериалу
-                lifecycleScope.launch {
-                    episodes = service.getSeasons(selectedId)
-                    if (episodes.items.isNullOrEmpty()) {
-                        Toast.makeText(this@CActivityAdd, "Либо это не сериал, либо отсутствуют серии. Пока не могу добавить.", Toast.LENGTH_LONG).show()
-                        return@launch
-                    }
-                    val episodesDates = ArrayList<LocalDate>()
-                    episodes.items!!.forEach { season ->
-                        season.episodes?.forEach { episode ->
-                            val date = LocalDate.parse(episode.releaseDate)
-                            episodesDates.add(date)
-                        }
-                    }
-                    newTvSeries.episodes = episodesDates
-                }
-                //TODO По ходу два lifecycleScope запускаются одновременно.
 
                 lifecycleScope.launch {
-                    // 2. Добавляем в БД
-                    val tvSeriesFromDB = daoTvSeries.findById(selectedId)
-                    tvSeriesFromDB?.let {
-                        daoTvSeries.update(newTvSeries)
-                    } ?: run {
-                        daoTvSeries.insert(newTvSeries)
-                    }
+                    createSeriesInfo()
+                    finish()
                 }
-                finish()
             }
 
-
-
-
         }
+    }
+
+    /** Запрашивает серии сериала и записывает все данные в БД */
+    private suspend fun createSeriesInfo() = coroutineScope {
+        val episodesDates = ArrayList<LocalDate>()
+        // 1. запрашиваем инфо по сериалу
+        val promiseEpisodes: Deferred<CApiResponseEpisodes> = async{ getEpisodes() }
+        episodes = promiseEpisodes.await()
+        if (episodes.items.isNullOrEmpty()) {
+            Toast.makeText(this@CActivityAdd, "Либо это не сериал, либо отсутствуют серии. Пока не могу добавить.", Toast.LENGTH_LONG).show()
+            return@coroutineScope
+        }
+
+        episodes.items!!.forEach { season ->
+            season.episodes?.forEach { episode ->
+                val date = LocalDate.parse(episode.releaseDate)
+                episodesDates.add(date)
+            }
+        }
+        // корутина для записи в БД
+        val jobSaveToDB = launch{
+            val tvSeriesFromDB = daoTvSeries.findById(selectedId)
+            tvSeriesFromDB?.let {
+                daoTvSeries.update(newTvSeries)
+            } ?: run {
+                daoTvSeries.insert(newTvSeries)
+            }
+        }
+
+        newTvSeries.episodes = episodesDates
+        jobSaveToDB.start()
+    }
+
+    /** Возвращает результат запроса эпизодов сериала */
+    suspend fun getEpisodes(): CApiResponseEpisodes {
+        return@getEpisodes service.getSeasons(selectedId)
     }
 }
