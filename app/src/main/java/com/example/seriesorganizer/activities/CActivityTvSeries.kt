@@ -10,14 +10,18 @@ import com.example.seriesorganizer.databinding.ActivityMainListBinding
 import com.example.seriesorganizer.databinding.ActivityTvSeriesBinding
 import com.example.seriesorganizer.model.CTvSeries
 import com.example.seriesorganizer.utils.CDatabase
+import com.shuhart.materialcalendarview.CalendarDay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CActivityTvSeries : AppCompatActivity() {
     private lateinit var binding: ActivityTvSeriesBinding
 
     private lateinit var tvSeries: CTvSeries
     private lateinit var daoTvSeries: IDAOTvSeries
+    private val dateEpisodes = ArrayList<CalendarDay>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +37,16 @@ class CActivityTvSeries : AppCompatActivity() {
             binding.tvName.setText(tvSeries?.name)
             binding.tvDescription.setText(tvSeries?.description)
 
-            // TODO Заглушка, списко серий в текстовом виде. Заменить на календарь
-            val strEpisodes = tvSeries.episodes.joinToString(System.lineSeparator())
-            binding.tvEpisodes.setText(strEpisodes)
+            tvSeries.episodes.forEach { date ->
+                val newDate = CalendarDay.from(date.year, date.monthValue - 1, date.dayOfMonth)
+                dateEpisodes.add(newDate)
+            }
+            binding.calendarEpisodes.dispatchSetSelected(false)
+            dateEpisodes.forEach { date ->
+                binding.calendarEpisodes.setDateSelected(date, true)
+
+            }
+
 
         }
 
